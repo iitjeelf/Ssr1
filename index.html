@@ -184,8 +184,11 @@ let keyLoaded = false;
 
 const subjects=["Maths","Physics","Chemistry"];
 /* GOOGLE SHEET FUNCTION */
+/* GOOGLE SHEET WORKING FUNCTION */
 function sendToGoogleSheet(subject, correct, wrong, blank, total, percentage) {
-    const url = "https://script.google.com/macros/s/AKfycbx8kj7t2rTAzgxvzFZoSYSjIGyJcOYQyk6R08ewYV6EeV0Hq-1MwPCirhQF20uak7M-/exec";
+
+    // 🔴 UPDATE THIS — paste your NEW Web App URL here
+    const url = "https://script.google.com/macros/s/AKfycbwaeFPG3ibGOoF13eEFIdv6iFS6-wTkbSFb66BRjNJeRQMk8xYoao6DsEbSBy5Vic28/exec";
 
     const payload = {
         name: progress.student.name,
@@ -197,14 +200,18 @@ function sendToGoogleSheet(subject, correct, wrong, blank, total, percentage) {
         wrong: wrong,
         blank: blank,
         total: total,
-        percentage: percentage
+        percentage: percentage,
+        timestamp: new Date().toLocaleString()
     };
 
     fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    }).catch(e=>console.error('Google Sheet upload failed',e));
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    })
+    .then(r => r.text())
+    .then(t => console.log("Sheet Success:", t))
+    .catch(e => console.error("Sheet Error:", e));
 }
 
 let examData={files:[],subjectNames:[],keys:[]};
